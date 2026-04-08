@@ -250,6 +250,7 @@
         let text = textInput.value;
         if (!text.trim()) return;
 
+        // 【今回の「お節介」追加箇所】
         // 1. 全角スペースを半角化
         text = text.replace(/　/g, ' ');
         // 2. 二重以上の半角スペースを単一化
