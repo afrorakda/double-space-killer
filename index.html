@@ -27,35 +27,41 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden; /* スクロールはTextarea内に限定 */
             -webkit-font-smoothing: antialiased;
-            -webkit-touch-callout: none;
-            user-select: none;
         }
 
         .container {
             width: 100%;
             max-width: 420px;
-            padding: 40px 20px;
+            padding: 15px 15px 10px;
             box-sizing: border-box;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
-        h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -1.5px; }
-        .subtitle { font-size: 1rem; color: var(--text-gray); font-weight: 600; margin-bottom: 30px; }
+        header { margin-bottom: 10px; }
+        h1 { font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -1.2px; }
+        .subtitle { font-size: 0.85rem; color: var(--text-gray); font-weight: 600; margin: 2px 0 0; }
 
-        .input-wrapper { position: relative; margin-bottom: 20px; }
+        .input-wrapper { 
+            position: relative; 
+            flex-grow: 1; /* ビューワーを最大化 */
+            margin-bottom: 12px;
+        }
         
         textarea {
             width: 100%;
-            height: 250px;
-            padding: 20px;
-            padding-right: 48px;
+            height: 100%;
+            padding: 15px;
+            padding-right: 40px;
             border: 2px solid var(--border);
             border-radius: var(--radius);
             background: var(--input-bg);
             font-size: 1.1rem;
-            line-height: 1.6;
+            line-height: 1.5;
             font-weight: 600;
             color: var(--main) !important;
             box-sizing: border-box;
@@ -64,18 +70,17 @@
             -webkit-appearance: none;
             -webkit-text-fill-color: var(--main) !important;
             opacity: 1 !important;
-            user-select: text;
         }
         textarea::placeholder { color: var(--placeholder); -webkit-text-fill-color: var(--placeholder); }
 
         .clear-btn {
             position: absolute;
-            right: 12px;
-            top: 12px;
+            right: 10px;
+            top: 10px;
             background: none;
             border: none;
             color: #aaa;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             cursor: pointer;
             padding: 5px;
@@ -86,25 +91,31 @@
 
         .controls {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
         }
 
         .action-btn {
-            background: var(--main);
-            color: #fff;
+            background: var(--accent);
+            color: var(--main);
             border: none;
-            padding: 18px;
+            padding: 14px 5px;
             border-radius: var(--radius);
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: transform 0.05s, background-color 0.2s;
             touch-action: manipulation;
         }
         .action-btn:active { transform: scale(0.96); opacity: 0.9; }
-        .action-btn.secondary { background: var(--accent); color: var(--main); font-size: 0.95rem; }
+        .action-btn.primary { 
+            background: var(--main); 
+            color: #fff; 
+            grid-column: span 2; 
+            font-size: 1rem;
+            padding: 18px;
+        }
         .action-btn.killed { background-color: #555 !important; }
 
         #toast {
@@ -125,18 +136,25 @@
         }
         #toast.visible { transform: translateY(60px); }
 
-        footer { margin-top: 60px; font-size: 12px; color: #777; line-height: 1.8; font-weight: 500; }
+        footer { font-size: 10px; color: #999; line-height: 1.4; margin-top: 5px; }
         footer a { color: inherit; text-decoration: underline; }
-        .footer-btns { margin-top: 30px; }
+        
+        .footer-btns { 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
         .kofi-btn {
-            display: inline-block; background: var(--main); color: #fff;
-            padding: 14px 28px; border-radius: var(--radius);
-            text-decoration: none; font-weight: bold; font-size: 15px; margin-bottom: 15px;
+            background: var(--main); color: #fff;
+            padding: 10px; border-radius: 12px;
+            text-decoration: none; font-weight: bold; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
         }
         .home-btn {
-            display: block; width: 70%; margin: 0 auto; background: var(--accent);
-            color: var(--main); border: none; padding: 12px;
-            border-radius: var(--radius); font-weight: 800; font-size: 14px; cursor: pointer;
+            background: var(--accent); color: var(--main);
+            border: none; padding: 10px; border-radius: 12px;
+            font-weight: 800; font-size: 12px; cursor: pointer;
         }
 
         #modal {
@@ -144,10 +162,10 @@
             background: rgba(0,0,0,0.6); align-items: center; justify-content: center; z-index: 4000;
         }
         .modal-content {
-            background: #fff; width: 85%; max-width: 340px; padding: 35px;
+            background: #fff; width: 85%; max-width: 340px; padding: 30px;
             border-radius: var(--radius); text-align: left; position: relative;
         }
-        .close-x { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #888; cursor: pointer; }
+        .close-x { position: absolute; top: 12px; right: 15px; font-size: 20px; color: #888; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -155,22 +173,25 @@
 <div id="toast">Killed!</div>
 
 <div class="container">
-    <h1>Double Space Killer</h1>
-    <p class="subtitle">Clean up messy spacing instantly.</p>
+    <header>
+        <h1>Double Space Killer</h1>
+        <p class="subtitle">Ultimate spacing hygiene for professionals.</p>
+    </header>
 
     <div class="input-wrapper">
-        <textarea id="textInput" placeholder="Paste your text here...&#10;It will remove all double spaces, tabs, and trailing blanks for a clean finish." oninput="handleInput()"></textarea>
+        <textarea id="textInput" placeholder="Paste your text...&#10;It kills multi-spaces, trailing blanks, and fixes missing spaces after periods." oninput="handleInput()"></textarea>
         <button class="clear-btn" id="clrBtn" onclick="clearText()">×</button>
     </div>
 
     <div class="controls">
-        <button class="action-btn" id="killBtn" onclick="killSpaces()">Kill Multi-Spaces</button>
-        <button class="action-btn secondary" id="copyBtn" onclick="copyResult()">Copy Clean Text</button>
+        <button class="action-btn primary" id="killBtn" onclick="killSpaces()">Kill Multi-Spaces</button>
+        <button class="action-btn" onclick="tabToSpace()">Tab to Space</button>
+        <button class="action-btn" id="copyBtn" onclick="copyResult()">Copy Clean</button>
     </div>
 
     <div class="footer-btns">
         <a href="https://ko-fi.com/afrorakda" target="_blank" class="kofi-btn">☕️buy me a coffee</a>
-        <button class="home-btn" onclick="showModal()">Add to Home Screen</button>
+        <button class="home-btn" onclick="showModal()">Add Home</button>
     </div>
 
     <footer>
@@ -183,9 +204,9 @@
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close-x" onclick="hideModal()">×</span>
         <h3>📱 Install</h3>
-        <p>Add to your home screen.</p>
-        <p>🍏 <strong>iPhone (Safari):</strong><br>Tap Share, then Add to Home Screen.</p>
-        <p>🤖 <strong>Android (Chrome):</strong><br>Tap Menu (⋮), then Add to Home Screen.</p>
+        <p style="font-size: 14px;">Add to your home screen.</p>
+        <p style="font-size: 13px;">🍏 <strong>iPhone:</strong> Share > Add to Home Screen.</p>
+        <p style="font-size: 13px;">🤖 <strong>Android:</strong> Menu > Add to Home Screen.</p>
     </div>
 </div>
 
@@ -198,7 +219,7 @@
     let toastTimer;
 
     window.onload = () => {
-        const saved = localStorage.getItem('killer_data');
+        const saved = localStorage.getItem('killer_data_v2');
         if (saved) {
             textInput.value = saved;
             updateClearBtn();
@@ -211,7 +232,7 @@
     }
 
     function saveData() {
-        localStorage.setItem('killer_data', textInput.value);
+        localStorage.setItem('killer_data_v2', textInput.value);
     }
 
     function updateClearBtn() {
@@ -229,29 +250,40 @@
         let text = textInput.value;
         if (!text.trim()) return;
 
-        // 暗殺ロジック
-        // 1. タブをスペースに変換
-        text = text.replace(/\t/g, ' ');
-        // 2. 二重以上のスペースを単一スペースに
+        // 1. 全角スペースを半角化
+        text = text.replace(/　/g, ' ');
+        // 2. 二重以上の半角スペースを単一化
         text = text.replace(/ +/g, ' ');
-        // 3. 各行の行頭・行末のスペースを削除
+        // 3. 句読点（.?!）の直後に英数字がある場合、スペースを強制挿入
+        text = text.replace(/([.?!])([A-Za-z0-9])/g, '$1 $2');
+        // 4. 各行のトリム（行頭・行末のゴミ掃除）
         text = text.split('\n').map(line => line.trim()).join('\n');
-        // 4. 三重以上の改行を二重に（空行の整理）
+        // 5. 三重以上の改行を整理
         text = text.replace(/\n{3,}/g, '\n\n');
 
         textInput.value = text;
         saveData();
         
-        // フィードバック
         const originalText = killBtn.innerText;
         killBtn.innerText = 'All Killed!';
         killBtn.classList.add('killed');
-        showToast('Cleaned!');
+        showToast('Hygiene complete!');
         
         setTimeout(() => {
             killBtn.innerText = originalText;
             killBtn.classList.remove('killed');
         }, 1500);
+    }
+
+    function tabToSpace() {
+        let text = textInput.value;
+        if (!text.includes('\t')) {
+            showToast('No tabs found');
+            return;
+        }
+        textInput.value = text.replace(/\t/g, ' ');
+        saveData();
+        showToast('Tabs converted to spaces');
     }
 
     async function copyResult() {
